@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0",
     "@chakra-ui/react": "^2.3.1",
+    "@chakra-ui/styled-system": ">=2.0.0",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@hookform/resolvers": "^2.9.7",
     "apexcharts": "^3.35.5",
     "framer-motion": "^6",
     "next": "12.2.5",
@@ -20,7 +23,8 @@
     "react-apexcharts": "^1.4.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.34.2",
-    "react-icons": "^4.4.0"
+    "react-icons": "^4.4.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "18.7.14",

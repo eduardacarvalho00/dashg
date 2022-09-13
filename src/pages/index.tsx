@@ -3,6 +3,8 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../components/Form/Input';
 
 interface LoginInputs {
@@ -10,21 +12,27 @@ interface LoginInputs {
   password: string;
 }
 
+const signInFormSchema = yup.object().shape({
+  email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
+  password: yup.string().required('Digite sua senha'),
+});
+
 export default function SignIn() {
   const router = useRouter();
   
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginInputs>();
+    formState: { errors },
+  } = useForm<LoginInputs>({
+    resolver: yupResolver(signInFormSchema),
+  });
 
   // eslint-disable-next-line no-unused-vars
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     router.push('/users');
     console.log(data);
   };
-  
   return (
     <Flex
       w='100vm'
@@ -47,19 +55,18 @@ export default function SignIn() {
             label='E-mail'
             type='email' 
             {...register('email')}
+            errors={errors.email}
           />
-          {errors.email && <span>This field is required</span>}
           <Input
             label='Senha'
             type='password'
             {...register('password')}
+            errors={errors.password}
             current-password = 'true'
           />
-          {errors.password && <span>This field is required</span>}
         </Stack>
 
         <Button
-          isLoading={isSubmitting}
           type="submit"
           mt='6'
           colorScheme={'pink'}
