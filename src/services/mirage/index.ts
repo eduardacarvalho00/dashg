@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import {
-  createServer, Model, Factory, Response, 
+  createServer, Model, Factory, Response, ActiveModelSerializer, 
 } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
@@ -12,6 +12,10 @@ interface User{
 
 export function makeServer() {
   const server = createServer({
+    serializers: {
+      applications: ActiveModelSerializer,
+    },
+    
     models: {
       user: Model.extend<Partial<User>>({}),
     },
@@ -51,7 +55,7 @@ export function makeServer() {
           { users },
         );
       });
-
+      this.get('/users/:id');
       this.namespace = '';
       this.passthrough();
     },

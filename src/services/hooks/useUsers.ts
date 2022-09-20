@@ -1,21 +1,27 @@
 import { useQuery } from 'react-query';
 import { api } from '../api';
 
-// interface PropsUsers{
-//   id: string;
-//   name: string;
-//   email:{
-//     email: string;
-//   }
-//   created_at: {
-//     createdAt: string;
-//   }
-// }
+interface PropsUsers{
+  id: string;
+  name: string;
+  email:{
+    email: string;
+  }
+  created_at: {
+    createdAt: string;
+  }
+}
 
-export async function getUsers() {
-  const { data } = await api.get('users');
+export async function getUsers(page: number) {
+  const { data, headers } = await api.get('users', {
+    params: {
+      page,
+    },
+  });
 
-  const users = data.users.map((user) => {
+  const totalCount = Number(headers['x-total-count']);
+
+  const users = data.users.map((user: PropsUsers) => {
     return {
       ide: user.id,
       name: user.name,
@@ -28,11 +34,11 @@ export async function getUsers() {
     };
   });
 
-  return users;
+  return { users, totalCount };
 }
 
-export function useUsers() {
-  return useQuery('users', getUsers, {
-    staleTime: 1000 * 5, // (milissegundos) 5 segundos 
+export function useUsers(page: number) {
+  return useQuery(['users', page], () => getUsers(page), {
+    staleTime: 1000 * 60 * 10, // => milissegundos 10 min
   });
 }
